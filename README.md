@@ -192,7 +192,7 @@ index = main
 ### Check outputs.conf
 
 Ensure the forwarder is configured to send data to the Splunk server:
-
+```
 [tcpout]
 defaultGroup = default-autolb-group
 
@@ -200,7 +200,7 @@ defaultGroup = default-autolb-group
 server = Your-Splunk-Server-IP:9997
 
 [tcpout-server://Your-Splunk-Server-IP:9997]
-
+```
 ---
 
 ### Restart Forwarder (Windows Virtual Machine)
