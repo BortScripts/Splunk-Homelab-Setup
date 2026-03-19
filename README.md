@@ -10,7 +10,7 @@ This project documents the setup of a basic Splunk homelab used for log collecti
 
 ---
 
-## 1. Ubuntu Server Setup
+## Ubuntu Server Setup
 
 Start by installing the latest version of Ubuntu Server LTS:
 
@@ -28,7 +28,7 @@ Update the system:
 sudo apt update && sudo apt upgrade -y
 ```
 
-## 2. Install Splunk Enterprise
+## Install Splunk Enterprise
 
 Now that the Ubuntu server is set up, the next step is installing Splunk Enterprise.
 
@@ -59,7 +59,7 @@ After creating an account:
 On your ubuntu server, paste the wget command:
 
 ```bash
-wget -O splunk.deb "<link-here>"
+wget -O splunk.deb "link-here"
 ```
 ---
 
@@ -73,14 +73,14 @@ sudo dpkg -i splunk.deb
 
 ---
 
-## 3. Start Splunk
+## Start Splunk
 
 After installing Splunk, start the service using:
 
 ```bash
 sudo /opt/splunk/bin/splunk start --run-as-root
 ```
-## 4. Initial Splunk Setup
+## Initial Splunk Setup
 
 During the first startup, you will be prompted to:
 
@@ -101,23 +101,23 @@ sudo /opt/splunk/bin/splunk enable boot-start --run-as-root
 
 ---
 
-## 5. Access the Splunk Web Interface
+## Access the Splunk Web Interface
 
 Once Splunk is running, open a browser on your host machine and navigate to:
 
-http://<Ubuntu-Server-IP>:8000
+http://Ubuntu-Server-IP:8000
 
 Login using the credentials created during setup. If everything is configured correctly, the Splunk dashboard should load without issues.
 
 ---
 
-## 6. Configure Splunk to Receive Logs
+## Configure Splunk to Receive Logs
 
 Before logs can be received, the Splunk server must be configured to listen on a port. In the Splunk web interface, navigate to **Settings** in the top right corner, then select **Forwarding & Receiving**. Under the **Receiving Data** section, click **Configure Receiving** and add port 9997. This port will be used by forwarders to send log data to the Splunk server.
 
 ---
 
-## 7. Set Up Windows Endpoint
+## Set Up Windows Endpoint
 
 Now that the Splunk Server is ready to receive data, set up a Windows 11 virtual machine. This system will act as the primary log source and will later be used for testing and simulating activity within the environment.
 
@@ -129,7 +129,7 @@ Once the installation is complete, the Windows machine will be used to:
 
 ---
 
-## 8. Install Splunk Universal Forwarder
+## Install Splunk Universal Forwarder
 
 Download the Splunk Universal Forwarder:
 
@@ -144,13 +144,13 @@ Run the installer as Administrator on the Windows virtual machine. During setup,
 
 Leave the **Deployment Server** field blank. 
 
-When prompted for the receiving indexer, enter: <Your-Splunk-Server-IP>:9997
+When prompted for the receiving indexer, enter: Your-Splunk-Server-IP:9997
 
 This tells the forwarder where to send log data.
 
 ---
 
-## 9. Verify Log Ingestion
+## Verify Log Ingestion
 
 After installation completes, the forwarder should begin sending logs automatically. To verify, open the Splunk web interface and naviage to:
 
@@ -163,7 +163,7 @@ index=*
 ```
 ---
 
-## 10. Troubleshooting
+## Troubleshooting
 
 If logs are not appearing in Splunk, verify the forwarder configuration on the Windows virtual machine. 
 
@@ -174,7 +174,7 @@ If logs are not appearing in Splunk, verify the forwarder configuration on the W
 Confirm the file exists at: C:\Program Files\SplunkUniversalForwarder\etc\system\local\inputs.conf
 
 If it does not exist, create it and add the following:
-
+```
 [WinEventLog://Application]
 disabled = 0
 index = main
@@ -186,7 +186,7 @@ index = main
 [WinEventLog://System]
 disabled = 0
 index = main
-
+```
 ---
 
 ### Check outputs.conf
@@ -197,9 +197,9 @@ Ensure the forwarder is configured to send data to the Splunk server:
 defaultGroup = default-autolb-group
 
 [tcpout:default-autolb-group]
-server = <Your-Splunk-Server-IP>:9997
+server = Your-Splunk-Server-IP:9997
 
-[tcpout-server://<Your-Splunk-Server-IP>:9997]
+[tcpout-server://Your-Splunk-Server-IP:9997]
 
 ---
 
@@ -220,7 +220,7 @@ sudo /opt/splunk/bin/splunk restart --run-as-root
 
 ---
 
-## 11. Install Sysmon
+## Install Sysmon
 
 Sysmon (System Monitor) provides additional visibility into system activity beyond standard Windows Event Logs.
 
@@ -272,28 +272,28 @@ Run the installation command:
 Sysmon64.exe -i sysmonconfig-export.xml
 ```
 
-## 12. Configure Splunk Forwarder for Sysmon
+## Configure Splunk Forwarder for Sysmon
 
 To ensure Sysmon logs are forwarded to Splunk, update the inputs.conf file.
 
 Path: C:\Program Files\SplunkUniversalForwarder\etc\system\local\inputs.conf
 
 Add the following entry:
-
+```
 [WinEventLog://Microsoft-Windows-Sysmon/Operational]
 disabled = 0
 index = main
-
+```
 ---
 
-## 13. Update Forwarder Permissions
+## Update Forwarder Permissions
 
 To reliably collect Sysmon logs, the Splunk Universal Forwarder must have sufficient permissions. Open Command Prompt as Administrator and run:
 ```cmd
 sc config SplunkForwarder obj= LocalSystem
 ```
 
-## 14. Restart Services
+## Restart Services
 
 ```cmd
 net stop SplunkForwarder
@@ -308,10 +308,137 @@ sudo /opt/splunk/bin/splunk restart --run-as-root
 
 ---
 
-## 15. Verify Sysmon Logs
+## Verify Sysmon Logs
 
 To confirm Sysmon logs are being ingested, run the following query in Splunk:
 
 ```spl
 index=* source=WinEventLog:Microsoft-Windows-Sysmon/Operational
 ```
+---
+
+## OPNsense Firewall Setup
+
+To simulate a realistic network environment and enable traffic monitoring, an OPNsense firewall was deployed as the central gateway for all lab systems. This allows for traffic inspection, filtering, and forwarding logs to Splunk for analysis.
+
+---
+
+### Creating the OPNsense Virtual Machine
+
+Create a new virtual machine dedicated to OPNsense using your virtualization platform.
+
+Download OPNsense from: https://opnsense.org/download/
+
+Configure two network adapter:
+- Network Adapter 1 (WAN): NAT
+- Network Adapter 2 (LAN): Host-Only
+
+This setup allows:
+- WAN --> internet access (via NAT)
+- LAN --> internal lab communication (isolated network)
+
+---
+
+### Initial OPNsense setup
+
+Start the VM and proceed through the installer.
+
+During the interface assignment:
+- Assign the NAT adapter (em0) as WAN
+- Assign the Host-Only adapter (em1) as LAN
+
+Once installation completes, access the console menu and note the assigned IP address for the LAN interface.
+
+If needed, verify your host-only network range on your host machine using ipconfig. Ensure your LAN interface is within the same subnet.
+
+---
+
+### Basic Configuration
+
+Proceed through the setup wizard:
+- Leave most settings as default
+- Disable "Optimize for Multi-WAN"
+- Configure DNS server (1.1.1.1, 8.8.8.8)
+
+Set the LAN IP using CIDR notation:
+```
+OPNsense-IP/24
+```
+Example:
+```
+192.168.1.1/24
+```
+
+---
+
+### Network Integration
+
+Update all lab machines to use the firewall as their gateway:
+- Splunk Server (Ubuntu)
+- Windows Endpoint (VM)
+- Kali Linux (attacker machine)
+
+Set default gateway to OPNsense LAN IP. This ensures all traffic flows through the firewall for monitoring.
+
+---
+
+### Configuring Syslog Forwarding
+
+To enable ingestion into Splunk, OPNsense was configured to forward logs using syslog.
+
+Navigate to: System --> Logging --> Remote
+
+Add a new remote logging target with the following settings:
+- Transport: UDP
+- Applications: select all
+- Levels: select all
+- Facilities: select all
+- Hostname: Splunk-Server-IP
+- Port: 5514
+- Leave RFC5424 unchecked
+
+---
+
+### Splunk Syslog Input Configuration
+
+On the Splunk server, configure a UDP input to receive firewall logs. 
+
+Edit the inputs.conf file
+```bash
+sudo nano /opt/splunk/etc/system/local/inputs.conf
+```
+
+Add:
+```
+[udp://5514]
+connection_host = ip
+sourcetype = syslog
+index = main
+disabled = 0
+```
+
+### Verifying Log Ingestion
+
+To confirm logs are reaching Splunk:
+
+1. Capture traffic on Splunk server:
+```bash
+sudo tcpdump -i <interface> port 5514
+```
+
+2. In Splunk, run:
+```
+index=* | stats count by sourcetype
+```
+Look for syslog. If configured correctly, logs from OPNsense will appear in Splunk.
+
+---
+
+### Default Firewall Rules
+
+The default OPNsense LAN rule was used:
+- Allow: LAN net --> any
+
+Logging was enabled on this rule to ensure visibility into all traffic during initial testing. Additional rules and segmentation will be implemented later for detection use cases.
+
+
