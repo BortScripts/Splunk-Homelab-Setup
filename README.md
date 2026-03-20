@@ -142,6 +142,11 @@ Before logs can be received, the Splunk server must be configured to listen on a
 <img width="975" height="946" alt="image" src="https://github.com/user-attachments/assets/4e19f2cd-1fa8-46df-9c2e-0bebe6c35a98" />
 
 
+<img width="975" height="258" alt="image" src="https://github.com/user-attachments/assets/78b99a1b-5471-441d-a11c-2379d10edf99" />
+
+<img width="975" height="138" alt="image" src="https://github.com/user-attachments/assets/67284f20-99d8-4939-952a-008a16a14b81" />
+
+
 ---
 
 ## Set Up Windows Endpoint
@@ -156,12 +161,6 @@ Once the installation is complete, the Windows machine will be used to:
 
 
 <img width="975" height="731" alt="image" src="https://github.com/user-attachments/assets/471c377d-b393-4b64-ab7a-ed09e861463b" />
-
-
-<img width="975" height="258" alt="image" src="https://github.com/user-attachments/assets/ef027941-ce12-460a-8868-7c943074377d" />
-
-
-<img width="975" height="138" alt="image" src="https://github.com/user-attachments/assets/6b0ef5bf-7b3c-4ec1-b7cb-07aa3964ba60" />
 
 
 ---
