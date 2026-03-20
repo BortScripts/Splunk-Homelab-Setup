@@ -18,6 +18,11 @@ https://ubuntu.com/download/server
 
 Ubuntu Server was chosen because it is lightweight and leaves room for additional services later.
 
+<img width="975" height="746" alt="image" src="https://github.com/user-attachments/assets/0f13cdea-cf23-4a80-a221-53f4d5f098c1" />
+
+<img width="975" height="552" alt="image" src="https://github.com/user-attachments/assets/15443594-4c91-4b8c-b4db-c2718e8f7a1c" />
+
+
 ### During Installation
 - Install **OpenSSH** (required for remote management)
 
