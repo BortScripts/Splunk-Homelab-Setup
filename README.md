@@ -5,8 +5,8 @@ This project documents the setup of a basic Splunk homelab used for log collecti
 - Ubuntu Server (Splunk Enterprise)
 - Windows 11 Endpoint (log source)
 - Splunk Universal Forwarder
+- OPNsense firewall for traffic filtering
 - Optional: Sysmon for enhanced logging
-- Planned: OPNsense firewall for traffic filtering
 
 ---
 
