@@ -18,7 +18,9 @@ https://ubuntu.com/download/server
 
 Ubuntu Server was chosen because it is lightweight and leaves room for additional services later.
 
+
 <img width="975" height="746" alt="image" src="https://github.com/user-attachments/assets/0f13cdea-cf23-4a80-a221-53f4d5f098c1" />
+
 
 <img width="975" height="552" alt="image" src="https://github.com/user-attachments/assets/15443594-4c91-4b8c-b4db-c2718e8f7a1c" />
 
@@ -26,8 +28,16 @@ Ubuntu Server was chosen because it is lightweight and leaves room for additiona
 ### During Installation
 - Install **OpenSSH** (required for remote management)
 
+
+<img width="975" height="602" alt="image" src="https://github.com/user-attachments/assets/85777255-0a4a-429d-a798-a6aee9e01619" />
+
+
 ### After Installation
 Update the system:
+
+
+<img width="919" height="344" alt="image" src="https://github.com/user-attachments/assets/b515dd2f-13ca-46aa-82c0-ab7af7b3cdfe" />
+
 
 ```bash
 sudo apt update && sudo apt upgrade -y
@@ -44,6 +54,10 @@ Go to the Splunk website and create a free account:
 https://www.splunk.com
 
 Splunk offers a free trial of Splunk Enterprise. After the trial period, it automatically converts to the free version, which is sufficient for this homelab.
+
+
+<img width="975" height="631" alt="image" src="https://github.com/user-attachments/assets/ae0527dd-be4b-437d-a3b3-a9b19fb1cdb6" />
+
 
 > No payment information required
 
@@ -64,7 +78,7 @@ After creating an account:
 On your ubuntu server, paste the wget command:
 
 ```bash
-wget -O splunk.deb "link-here"
+wget -O splunk-10.2.1-abc123-linux-amd64.deb "https://download.splunk.com/products/splunk/releases/10.2.1/linux/splunk-10.2.1-abs123-linux-amd64.deb"
 ```
 ---
 
@@ -114,11 +128,19 @@ http://Ubuntu-Server-IP:8000
 
 Login using the credentials created during setup. If everything is configured correctly, the Splunk dashboard should load without issues.
 
+
+<img width="975" height="421" alt="image" src="https://github.com/user-attachments/assets/184fca75-c0c9-434b-ae5b-1a688ecf93cb" />
+
+
 ---
 
 ## Configure Splunk to Receive Logs
 
 Before logs can be received, the Splunk server must be configured to listen on a port. In the Splunk web interface, navigate to **Settings** in the top right corner, then select **Forwarding & Receiving**. Under the **Receiving Data** section, click **Configure Receiving** and add port 9997. This port will be used by forwarders to send log data to the Splunk server.
+
+
+<img width="975" height="946" alt="image" src="https://github.com/user-attachments/assets/4e19f2cd-1fa8-46df-9c2e-0bebe6c35a98" />
+
 
 ---
 
@@ -132,6 +154,16 @@ Once the installation is complete, the Windows machine will be used to:
 - Forward logs to the Splunk Server
 - Simulate activity for detection and analysis
 
+
+<img width="975" height="731" alt="image" src="https://github.com/user-attachments/assets/471c377d-b393-4b64-ab7a-ed09e861463b" />
+
+
+<img width="975" height="258" alt="image" src="https://github.com/user-attachments/assets/ef027941-ce12-460a-8868-7c943074377d" />
+
+
+<img width="975" height="138" alt="image" src="https://github.com/user-attachments/assets/6b0ef5bf-7b3c-4ec1-b7cb-07aa3964ba60" />
+
+
 ---
 
 ## Install Splunk Universal Forwarder
@@ -141,15 +173,25 @@ Download the Splunk Universal Forwarder:
 https://www.splunk.com/en_us/download/universal-forwarder.html
 
 
+<img width="975" height="731" alt="image" src="https://github.com/user-attachments/assets/994df6bb-5d1f-4f3f-9d66-9d4bb913d49e" />
+
+
 Run the installer as Administrator on the Windows virtual machine. During setup, select the following log sources:
 
 - Application Logs
 - Security Logs
 - System Logs
 
+
+<img width="773" height="602" alt="image" src="https://github.com/user-attachments/assets/05a4ee47-c7e8-4ec3-96e5-881036553206" />
+
+
 Leave the **Deployment Server** field blank. 
 
 When prompted for the receiving indexer, enter: Your-Splunk-Server-IP:9997
+
+<img width="775" height="603" alt="image" src="https://github.com/user-attachments/assets/3bb9b81e-9e51-46eb-9336-57a4685258e5" />
+
 
 This tells the forwarder where to send log data.
 
@@ -161,11 +203,20 @@ After installation completes, the forwarder should begin sending logs automatica
 
 - **Apps --> Search & Reporting**
 
+
+<img width="586" height="536" alt="image" src="https://github.com/user-attachments/assets/ed616ce6-e140-462b-8fad-92f859a71595" />
+
+
 Run the following query:
 
 ```spl
 index=*
 ```
+
+
+<img width="2547" height="1106" alt="image" src="https://github.com/user-attachments/assets/48064ffd-8b21-4aec-9cfd-fa97c36cba43" />
+
+
 ---
 
 ## Troubleshooting
@@ -260,6 +311,10 @@ The file used in this setup is: sysmonconfig-export.xml
 Extract the Sysmon zip file and place the configuration file in the same directory as 'Sysmon64.exe'.
 
 Example location: C:\Users\<Your-User>\Downloads\Sysmon
+
+
+<img width="975" height="383" alt="image" src="https://github.com/user-attachments/assets/29248631-4ea1-4a02-8c09-58ddbb3402c2" />
+
 
 ---
 
@@ -360,10 +415,24 @@ If needed, verify your host-only network range on your host machine using ipconf
 
 ### Basic Configuration
 
+
+<img width="950" height="706" alt="image" src="https://github.com/user-attachments/assets/e6768ce5-dfb2-454d-b670-a91263ccf864" />
+
+
 Proceed through the setup wizard:
 - Leave most settings as default
 - Disable "Optimize for Multi-WAN"
 - Configure DNS server (1.1.1.1, 8.8.8.8)
+
+
+<img width="975" height="348" alt="image" src="https://github.com/user-attachments/assets/d284cdc8-a368-425f-99b2-7ce86aab8f4a" />
+
+
+<img width="975" height="175" alt="image" src="https://github.com/user-attachments/assets/2f5954c8-7c6f-42b3-b1d9-78117eb65138" />
+
+
+<img width="975" height="488" alt="image" src="https://github.com/user-attachments/assets/2ccb138a-cc53-4ae8-8710-2b035d52067b" />
+
 
 Set the LAN IP using CIDR notation:
 ```
@@ -393,6 +462,10 @@ To enable ingestion into Splunk, OPNsense was configured to forward logs using s
 
 Navigate to: System --> Logging --> Remote
 
+
+<img width="975" height="256" alt="image" src="https://github.com/user-attachments/assets/fcb56ddc-cfcd-4a0d-84ed-c3a8835ddb09" />
+
+
 Add a new remote logging target with the following settings:
 - Transport: UDP
 - Applications: select all
@@ -413,12 +486,15 @@ Edit the inputs.conf file
 sudo nano /opt/splunk/etc/system/local/inputs.conf
 ```
 
+<img width="975" height="113" alt="image" src="https://github.com/user-attachments/assets/05bf52ee-33d8-4bc7-b91a-5ebfd6b8b48e" />
+
+
 Add:
 ```
 [udp://5514]
 connection_host = ip
 sourcetype = syslog
-index = main
+index = firewall
 disabled = 0
 ```
 
@@ -436,6 +512,10 @@ sudo tcpdump -i <interface> port 5514
 index=* | stats count by sourcetype
 ```
 Look for syslog. If configured correctly, logs from OPNsense will appear in Splunk.
+
+
+<img width="2559" height="528" alt="image" src="https://github.com/user-attachments/assets/db1db20b-1ee7-4967-bd10-41496b77e4dc" />
+
 
 ---
 
