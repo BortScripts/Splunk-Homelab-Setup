@@ -33,5 +33,3 @@ This is an active project that will continue to expand with:
 - Additional attack simulations
 - Detection rule development
 - More advanced log analysis
-
----
