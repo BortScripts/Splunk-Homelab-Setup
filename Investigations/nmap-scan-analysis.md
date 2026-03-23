@@ -29,6 +29,10 @@ nmap 192.168.174.130 -sS -p 1-1000
 - '-sS' performs a TCP SYN scan, commonly used for stealthy reconnaissance
 - '-p 1-1000' targets the most common ports
 
+
+<img width="540" height="170" alt="image" src="https://github.com/user-attachments/assets/191aec70-c7e3-43f1-9155-860c1c939932" />
+
+
 This type of scan is frequently used by attackers to quickly identify open services on a target system.
 
 ---
@@ -37,6 +41,9 @@ This type of scan is frequently used by attackers to quickly identify open servi
 
 Splunk was used to analyze activity generated during the scan.
 
+<img width="1288" height="690" alt="image" src="https://github.com/user-attachments/assets/0f73083c-438a-4c6d-aefc-f28b53c7a5c0" />
+
+
 Example search:
 ```spl
 index=* 192.168.174.132
@@ -44,11 +51,16 @@ index=* 192.168.174.132
 
 Key observations:
 
-- Multiple inbound connection attempts from a single source IP
-- Sequential targeting of a wide range of destination ports
-- High volume of traffic within a short time window
 
-These patterns indicate automated scanning behavior rather than normal user activity.
+<img width="970" height="817" alt="image" src="https://github.com/user-attachments/assets/7067aa44-b626-4245-adc1-74c5cd332cc1" />
+*Example of repeated connection attempts targeting SMB (port 445)*
+
+- Multiple inbound connection attempts from a single source IP
+- Activity was primarily observed on ports 135, 139 & 445
+- These ports are commonly associated with Windows services such as RPC and SMB
+- Repeated connection attempts occurred within a short time window
+
+The concentration of activity on these ports suggests targeted probing of common Windows services.
 
 ---
 
@@ -56,11 +68,11 @@ These patterns indicate automated scanning behavior rather than normal user acti
 
 The activity demonstrates clear indicators of reconnaissance:
 
-- A single source host initiated connections across hundreds of ports
+- A single source host initiated repeated connections to ports 135, 139, & 445
+- These ports are commonly targeted for Windows-based enumeration and exploitation
 - The scan occurred rapidly, suggesting automated tooling
-- The pattern aligns with known Nmap scanning techniques
 
-This behavior would be considered suspicious in a monitored environment and may warrant further investigation.
+This pattern is consistent with targeted reconnaissance against Windows systems.
 
 ---
 
