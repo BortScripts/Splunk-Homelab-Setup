@@ -65,6 +65,32 @@ The concentration of activity on these ports suggests targeted probing of common
 
 ---
 
+## Expanded Scan Observations
+
+A full port scan (1-65535) was conducted to compare results with the initial scan.
+```bash
+nmap 192.168.174.130 -sS -p-
+```
+
+
+<img width="1008" height="1177" alt="image" src="https://github.com/user-attachments/assets/795a136f-4506-42e5-a3de-ef71f8f33d37" />
+
+
+Key observations: 
+
+- Additional activity was observed on non-standard ports such as 5040
+- Several high-numbered ports (40,000+) appeared in the logs
+- These high ports are likely ephemeral ports associated with temporary connections
+
+Despite the increased scan range, the overall pattern of activity remained consistent:
+
+- The majority of observable traffic was still concentrated on ports 135, 139, & 445
+- No significant increase in meaningful service exposure was detected
+
+This demostrates that expanding scan scope does no always result in additional actionable findings and may introduce noise that requires filtering during analysis.
+
+---
+
 ## Findings
 
 The activity demonstrates clear indicators of reconnaissance:
@@ -105,25 +131,3 @@ This approach ensures that response actions are based on context rather than aut
 ## Conclusion
 
 This lab demonstrates how reconnaissance activity can be identified using centralized logging and basic SIEM analysis. Even simple scans generate detectable patterns that can be used to identify potential threats.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
