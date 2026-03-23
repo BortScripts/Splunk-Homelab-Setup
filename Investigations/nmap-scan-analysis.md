@@ -55,6 +55,7 @@ Key observations:
 <img width="970" height="817" alt="image" src="https://github.com/user-attachments/assets/7067aa44-b626-4245-adc1-74c5cd332cc1" />
 *Example of repeated connection attempts targeting SMB (port 445)*
 
+
 - Multiple inbound connection attempts from a single source IP
 - Activity was primarily observed on ports 135, 139 & 445
 - These ports are commonly associated with Windows services such as RPC and SMB
