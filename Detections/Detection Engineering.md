@@ -111,3 +111,87 @@ That combination clearly indicates malicious activity
 
 ## Key Event ID
 - 4104 (Script Block Logging)
+
+---
+
+# Scheduled Task Creation (Persistence)
+
+## Log Source
+- Microsoft-Windows-TaskScheduler/Operational
+
+## Description
+This detection identifies when a new scheduled task is created on the system. Scheduled tasks are commonly used by attackers as a persistence mechanism to maintain access by executing malicious code at specific times or system events.
+
+## Why it matters
+Scheduled tasks allow programs or scripts to run automatically without user interaction. Attackers abuse this functionality to:
+- Maintain persistence after initial compromise
+- Execute payloads at regular intervals
+- Trigger execution upon user login or system events
+- Run malicious scripts in the background
+
+Because scheduled tasks are a legitimate Windows feature, they can be difficult to detect without proper logging.
+
+## SPL Query
+
+```spl
+index=main source="WinEventLog:Microsoft-Windows-TaskScheduler/Operational"
+(EventCode=129 OR EventCode=140)
+| table _time host User EventCode Message
+```
+
+## SOC value
+From a SOC perspective, this is a high-value persistence detection.
+
+For example,
+- Successful login occurs
+- PowerShell command downloads a payload
+- A scheduled task is created to execute it
+
+That sequence strongly indicates persistence has been established.
+
+## Key Event ID
+- 129 (Created Task Process)
+- 140 (Task Registration Updated)
+
+---
+
+# Port Scan Detection
+
+## Log Source
+C:\Windows\System32\LogFiles\Firewall\pfirewall.log
+
+## Description
+This detection identifies potential port scanning activity by analyzing network connections across multiple destination ports from a single source. Port scanning is commonly used by attackers to discover open services and identify potential targets
+
+## Why it matters
+Port scanning is one of the earliest stages of an attack. Attackers use it to:
+- Identify open ports and services
+- Discover vulnerable systems
+- Map the network environment
+- Prepare for exploitation or lateral movement
+
+Detecting scanning activity early can help prevent further compromise.
+
+## SPL Query
+
+```spl
+index=main sourcetype=firewall
+| stats dc(dest_port) as unique_ports values(dest_port) as ports by src_ip dest_ip
+| where unique_ports >= 10
+```
+
+## SOC value
+From a SOC perspective, this is a reconnaissance detection.
+
+For example,
+- A system attempts connections to many ports on another host
+- That behavior indicates scanning
+- Followed by exploitation attempts
+
+This detection helps identify attackers before they gain access.
+
+## Key concept
+- Source IP
+- Destination IP
+- Destination Ports
+- Connection counts
